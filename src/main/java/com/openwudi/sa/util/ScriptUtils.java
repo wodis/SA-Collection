@@ -11,8 +11,8 @@ import java.io.InputStream;
 public class ScriptUtils {
     private static final Long MIN_IMAGE_SIZE = 1000L;
 
-    ADB adb = null;
-    String imagePath = null;
+    private ADB adb;
+    private String imagePath;
 
     public ScriptUtils(ADB adb, String imagePath) {
         this.adb = adb;
@@ -21,6 +21,7 @@ public class ScriptUtils {
 
     /**
      * 截图
+     *
      * @return
      */
     public String getImage() {
@@ -42,12 +43,8 @@ public class ScriptUtils {
     public void checkGameOffline() {
         try {
             String image = getImage();
-            String offline = Utils.cutImage(image, 880, 600, 155, 50);
             InputStream daojuPNG = this.getClass().getResourceAsStream("/offline.png");
-            FingerPrint fp1 = new FingerPrint(ImageIO.read(daojuPNG));
-            FingerPrint fp2 = new FingerPrint(ImageIO.read(new File(offline)));
-
-            float result = fp1.compare(fp2);
+            float result = getImageHashResult(image, 880, 600, 155, 50, daojuPNG);
             LogUtil.info("掉线,比对结果={}", result);
             if (result > 0.9f) {
                 adb.tap(960, 625);
@@ -60,7 +57,7 @@ public class ScriptUtils {
                 Utils.sleep(1000);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.error("掉线检查遇到错误.");
         }
     }
 
@@ -118,5 +115,15 @@ public class ScriptUtils {
         adb.tap(1790, 110);
         LogUtil.info(">>>>完成加血");
         LogUtil.info("");
+    }
+
+    public float getImageHashResult(String imagePath, int x, int y, int w, int h, InputStream compare) throws IOException {
+        String cutImgPath = Utils.cutImage(imagePath, x, y, w, h);
+        FingerPrint fp1 = new FingerPrint(ImageIO.read(compare));
+        FingerPrint fp2 = new FingerPrint(ImageIO.read(new File(cutImgPath)));
+
+        float result = fp1.compare(fp2);
+        LogUtil.info("图片比对结果: {}", result);
+        return result;
     }
 }

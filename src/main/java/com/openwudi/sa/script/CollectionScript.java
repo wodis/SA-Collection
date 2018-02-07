@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CollectionScript implements Script {
-    private static final Long MIN_IMAGE_SIZE = 1000L;
     private static final long RETRY_TIME = 5000L;
     private static final int RETRY_FAIL_TIMES = 5;
     public static final long ROUND_WAIT_TIME = 10 * 60 * 1000L;
@@ -74,13 +73,11 @@ public class CollectionScript implements Script {
 
     private String getResult(int x, int y, int w, int h) throws IOException {
         String image = scriptUtils.getImage();
-        String cutImgPath = Utils.cutImage(image, x, y, w, h);
         InputStream daojuPNG = this.getClass().getResourceAsStream("/daoju.png");
-        FingerPrint fp1 = new FingerPrint(ImageIO.read(daojuPNG));
-        FingerPrint fp2 = new FingerPrint(ImageIO.read(new File(cutImgPath)));
 
-        LogUtil.info("脱离战斗,比对结果={}", fp1.compare(fp2));
-        if (fp1.compare(fp2) > 0.85f) {
+        float result = scriptUtils.getImageHashResult(image, x, y, w, h, daojuPNG);
+        LogUtil.info("脱离战斗,比对结果={}", result);
+        if (result > 0.9f) {
             return "道具";
         } else {
             return "";

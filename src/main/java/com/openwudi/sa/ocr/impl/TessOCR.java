@@ -1,6 +1,7 @@
 package com.openwudi.sa.ocr.impl;
 
 import com.openwudi.sa.ocr.OCR;
+import com.openwudi.sa.util.LogUtil;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -30,10 +31,10 @@ public class TessOCR implements OCR {
         try {
             result = instance.doOCR(file);
         } catch (TesseractException e) {
-            System.err.println("tessOCR提取图片文字信息失败");
+            LogUtil.error("tessOCR提取图片文字信息失败");
         }
-        float time=(System.currentTimeMillis()-start)/(1000f);
-        System.out.println("tessOCR提取信息成功，耗时："+time+"s");
+        float time = (System.currentTimeMillis() - start) / (1000f);
+        LogUtil.info("tessOCR提取信息成功，耗时：{} s", time);
         return result;
     }
 

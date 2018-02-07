@@ -42,6 +42,19 @@ public class MusicPlay {
         }
     }
 
+    public MusicPlay(InputStream inputStream) {
+        try {
+            //打开一个声音文件流作为输入
+            as = new AudioStream(inputStream);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     // 一次播放 开始
     public void start() {
         if (as == null) {
