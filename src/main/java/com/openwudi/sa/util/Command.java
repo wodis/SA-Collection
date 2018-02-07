@@ -16,7 +16,8 @@ public class Command {
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
             }
-//            System.out.println(sb.toString());
+            System.out.println(commandStr);
+            System.out.println(sb.toString());
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
