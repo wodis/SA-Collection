@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CollectionScript implements Script {
+public class CollectionScript extends Script {
     private static final long RETRY_TIME = 5000L;
     private static final int RETRY_FAIL_TIMES = 5;
     public static final long ROUND_WAIT_TIME = 10 * 60 * 1000L;
@@ -27,6 +27,7 @@ public class CollectionScript implements Script {
     private ScriptUtils scriptUtils;
 
     public CollectionScript(ADB adb, String imagePath) {
+        super("素材收集脚本");
         this.imagePath = imagePath;
         this.adb = adb;
         this.scriptUtils = new ScriptUtils(adb, imagePath);

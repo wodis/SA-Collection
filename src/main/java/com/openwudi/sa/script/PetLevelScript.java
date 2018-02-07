@@ -13,8 +13,9 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
-public class PetLevelScript implements Script {
+public class PetLevelScript extends Script {
     private static final Long ROUND_TIME = 60000L;
     private static final OCRFactory OCR_FACTORY = new OCRFactory();
 
@@ -24,14 +25,20 @@ public class PetLevelScript implements Script {
     private MusicPlay musicPlay = new MusicPlay(Utils.class.getResourceAsStream("/sabgm_s0.wav"));
 
     public PetLevelScript(ADB adb, String imagePath) {
+        super("限制升级脚本");
         this.imagePath = imagePath;
         this.adb = adb;
         this.scriptUtils = new ScriptUtils(adb, imagePath);
     }
 
     public boolean run() throws IOException {
-        int pet = 1;
-        int limit = 80;
+        System.out.println("请输入宠物位置:");
+        Scanner sc = new Scanner(System.in);
+        String petString = sc.nextLine().trim();
+        System.out.println("请输入限制等级:");
+        String limitString = sc.nextLine().trim();
+        int pet = Integer.parseInt(petString);
+        int limit = Integer.parseInt(limitString);
 
         OCR ocr = OCR_FACTORY.getOcr(1);
 
