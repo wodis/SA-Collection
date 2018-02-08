@@ -4,10 +4,8 @@ import com.openwudi.sa.adb.ADB;
 import com.openwudi.sa.image.FingerPrint;
 import com.openwudi.sa.ocr.OCR;
 import com.openwudi.sa.ocr.impl.OCRFactory;
-import com.openwudi.sa.util.LogUtil;
-import com.openwudi.sa.util.MusicPlay;
-import com.openwudi.sa.util.ScriptUtils;
-import com.openwudi.sa.util.Utils;
+import com.openwudi.sa.util.*;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -53,7 +51,7 @@ public class PetLevelScript extends Script {
             String path = "";
             switch (pet) {
                 case 0:
-                    path = Utils.cutImage(screenshot, 240, 240, 73, 50);
+                    path = Utils.cutImage(screenshot, 240, 230, 73, 40);
                     break;
                 case 1:
                     path = Utils.cutImage(screenshot, 240, 400, 73, 50);
@@ -70,8 +68,9 @@ public class PetLevelScript extends Script {
                 default:
                     path = Utils.cutImage(screenshot, 240, 400, 73, 50);
             }
+            String blackWhitePng = convert2BlackWhite(path);
             adb.tap(1800, 110);
-            String result = ocr.getOCR(new File(path)).trim();
+            String result = ocr.getOCR(new File(blackWhitePng)).trim();
             if (result.length() > 0) {
                 try {
                     Integer level = null;
@@ -88,6 +87,8 @@ public class PetLevelScript extends Script {
                     LogUtil.error("画面太快了！");
                 }
             } else {
+                File debugDir = new File(new File(imagePath).getParent(), "debug");
+                FileUtils.moveFileToDirectory(new File(path), debugDir, true);
                 scriptUtils.checkGameOffline();
             }
             Utils.deleteCache(imagePath);
@@ -107,13 +108,28 @@ public class PetLevelScript extends Script {
         musicPlay.continuousStop();
     }
 
+    private String convert2BlackWhite(String path) {
+        String dest = Utils.getImagePath(imagePath);
+        BiImage bi = new BiImage();
+        try {
+            bi.initialize(path);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        bi.monochrome(dest); // 黑白化，输出到磁盘
+        return dest;
+    }
+
     /**
      * 达到等级后的操作
+     *
      * @param opt
      */
     private void operation(int opt) {
         levelUpBgmStart();
-        if (1 == opt){
+        if (1 == opt) {
             int times = 0;
             while (true) {
                 adb.tap(1560, 1000);
@@ -127,7 +143,7 @@ public class PetLevelScript extends Script {
                     System.exit(0);
                 }
             }
-        } else if (2 == opt){
+        } else if (2 == opt) {
             int times = 0;
             while (true) {
                 scriptUtils.stopBattle();

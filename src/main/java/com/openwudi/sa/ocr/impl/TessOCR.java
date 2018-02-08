@@ -20,7 +20,7 @@ public class TessOCR implements OCR {
     TessOCR() {
         instance = new Tesseract();
         File tessDataFolder = LoadLibs.extractTessResources("tessdata");
-//        instance.setLanguage("chi_sim");
+//        instance.setLanguage("eng");
         //Set the tessdata path
         instance.setDatapath(tessDataFolder.getAbsolutePath());
     }
