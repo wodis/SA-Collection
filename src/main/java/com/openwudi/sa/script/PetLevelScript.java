@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class PetLevelScript extends Script {
-    private static final Long ROUND_TIME = 2 * 60000L;
+    private static final Long ROUND_TIME = 1 * 60000L;
     private static final OCRFactory OCR_FACTORY = new OCRFactory();
 
     private String imagePath;
@@ -51,7 +51,7 @@ public class PetLevelScript extends Script {
             String path = "";
             switch (pet) {
                 case 0:
-                    path = Utils.cutImage(screenshot, 240, 230, 73, 40);
+                    path = Utils.cutImage(screenshot, 240, 230, 73, 50);
                     break;
                 case 1:
                     path = Utils.cutImage(screenshot, 240, 400, 73, 50);

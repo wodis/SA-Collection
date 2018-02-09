@@ -117,6 +117,17 @@ public class ScriptUtils {
         LogUtil.info("");
     }
 
+    /**
+     *
+     * @param imagePath 未裁剪过的图片
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param compare
+     * @return
+     * @throws IOException
+     */
     public float getImageHashResult(String imagePath, int x, int y, int w, int h, InputStream compare) throws IOException {
         String cutImgPath = Utils.cutImage(imagePath, x, y, w, h);
         FingerPrint fp1 = new FingerPrint(ImageIO.read(compare));

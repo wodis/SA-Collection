@@ -2,6 +2,7 @@ package com.openwudi.sa;
 
 import com.openwudi.sa.adb.ADB;
 import com.openwudi.sa.script.CollectionScript;
+import com.openwudi.sa.script.PetCaptureScript;
 import com.openwudi.sa.script.PetLevelScript;
 import com.openwudi.sa.script.Script;
 import com.openwudi.sa.thread.Daemon;
@@ -67,6 +68,9 @@ public class StoneAgeApp {
         List<Script> list = new ArrayList<Script>();
         list.add(new CollectionScript(adb, cachePath));
         list.add(new PetLevelScript(adb, cachePath));
+        list.add(new PetCaptureScript(adb, cachePath));
+
+
 
         Script script = null;
         LogUtil.infoFirst("══════════════════════════╗");

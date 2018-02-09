@@ -103,8 +103,8 @@ public class MusicPlay {
     public static void main(String[] args) {
         new Thread(new Runnable() {
             public void run() {
-                MusicPlay musicPlay = new MusicPlay(new File("D:\\csa\\YSA2.5.8\\stoneage2.5\\data\\bgm\\sabgm_s0.wav"));
-                musicPlay.continuousStart();
+                MusicPlay musicPlay = new MusicPlay(new File("/Users/diwu/ServerProjects/SA-Collection/src/main/resources/sabgm_b1.wav"));
+                musicPlay.start();
             }
         }).start();
     }
