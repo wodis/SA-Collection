@@ -72,8 +72,10 @@ public class PetLevelScript extends Script {
             adb.tap(1800, 110);
             String result = ocr.getOCR(new File(blackWhitePng)).trim();
             if (result.length() > 0) {
+                LogUtil.info("OCR结果：{}", result);
                 try {
                     Integer level = null;
+                    result = result.replaceAll("O", "0").replaceAll("o", "0");
                     level = Integer.valueOf(result);
                     LogUtil.info("等级: {}", level);
                     if (level >= limit) {
@@ -84,11 +86,11 @@ public class PetLevelScript extends Script {
                     LogUtil.info("等待 {} 秒后继续检查.", ROUND_TIME / (1000f));
                     Utils.sleep(ROUND_TIME);
                 } catch (NumberFormatException e) {
+                    moveDebugImage(path);
                     LogUtil.error("画面太快了！");
                 }
             } else {
-                File debugDir = new File(new File(imagePath).getParent(), "debug");
-                FileUtils.moveFileToDirectory(new File(path), debugDir, true);
+                moveDebugImage(path);
                 scriptUtils.checkGameOffline();
             }
             Utils.deleteCache(imagePath);
@@ -122,6 +124,11 @@ public class PetLevelScript extends Script {
         return dest;
     }
 
+    private void moveDebugImage(String path) throws IOException {
+        File debugDir = new File(new File(imagePath).getParent(), "debug");
+        FileUtils.moveFileToDirectory(new File(path), debugDir, true);
+    }
+
     /**
      * 达到等级后的操作
      *
@@ -136,7 +143,7 @@ public class PetLevelScript extends Script {
                 adb.tap(1600, 830);
                 adb.tap(1330, 760);
                 times++;
-                if (times > 50) {
+                if (times > 10) {
                     //关闭升级音乐
                     levelUpBgmStop();
                     LogUtil.info("登出并退出程序!!!");
@@ -148,7 +155,7 @@ public class PetLevelScript extends Script {
             while (true) {
                 scriptUtils.stopBattle();
                 times++;
-                if (times > 50) {
+                if (times > 10) {
                     //关闭升级音乐
                     levelUpBgmStop();
                     LogUtil.info("登出并退出程序!!!");
