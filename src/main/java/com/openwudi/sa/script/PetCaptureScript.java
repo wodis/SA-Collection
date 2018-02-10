@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class PetCaptureScript extends Script {
     private static final Long ROUND_TIME = 1 * 20 * 1000L;
-    private MusicPlay musicPlay = new MusicPlay(Utils.class.getResourceAsStream("/sabgm_b1.wav"));
 
     private ScriptUtils scriptUtils;
 
@@ -27,12 +26,13 @@ public class PetCaptureScript extends Script {
             float result = scriptUtils.getImageHashResult(img, 1350, 155, 100, 100, this.getClass().getResourceAsStream("/defense.png"));
             if (result > 0.9) {
                 LogUtil.info("遇敌了！快抓吧！");
-                start();
+                MusicPlay musicPlay = new MusicPlay(Utils.class.getResourceAsStream("/sabgm_b1.wav"));
+                start(musicPlay);
                 while (true) {
                     LogUtil.info("请输入ok继续:");
                     String str = sc.nextLine().trim();
                     if ("ok".equalsIgnoreCase(str)) {
-                        stop();
+                        stop(musicPlay);
                         break;
                     }
                 }
@@ -40,11 +40,12 @@ public class PetCaptureScript extends Script {
                 LogUtil.info("等待 {} 秒后继续检查.", ROUND_TIME / (1000f));
                 Utils.sleep(ROUND_TIME);
             }
+            Utils.deleteCache(imagePath);
         }
     }
 
     private boolean isStart = false;
-    private void start() {
+    private void start(final MusicPlay musicPlay) {
         isStart = true;
         new Thread(new Runnable() {
             public void run() {
@@ -59,7 +60,7 @@ public class PetCaptureScript extends Script {
         }).start();
     }
 
-    private void stop() {
+    private void stop(MusicPlay musicPlay) {
         isStart = false;
         musicPlay.stop();
     }
