@@ -11,22 +11,27 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class PetLevelScript extends Script {
-    private static final Long ROUND_TIME = 1 * 60000L;
+    private static final Long ROUND_TIME = 1 * 20 * 1000L;
     private static final OCRFactory OCR_FACTORY = new OCRFactory();
 
     private String imagePath;
     private ADB adb;
     private ScriptUtils scriptUtils;
     private MusicPlay musicPlay = new MusicPlay(Utils.class.getResourceAsStream("/sabgm_s0.wav"));
+    private Map<Integer, String> desc = new HashMap<Integer, String>();
 
     public PetLevelScript(ADB adb, String imagePath) {
         super("限制升级脚本");
         this.imagePath = imagePath;
         this.adb = adb;
         this.scriptUtils = new ScriptUtils(adb, imagePath);
+        desc.put(1, "登出");
+        desc.put(2, "停止遇敌");
     }
 
     public boolean run() throws IOException {
@@ -40,12 +45,12 @@ public class PetLevelScript extends Script {
         int pet = Integer.parseInt(petString);
         int limit = Integer.parseInt(limitString);
         int opt = Integer.parseInt(optString);
-        LogUtil.info("宠物位置:{} == 限制等级:{} == 停止方式:{}", pet, limit, opt);
+        LogUtil.info("宠物位置:{} == 限制等级:{} == 停止方式:{}", pet, limit, desc.get(opt));
 
         OCR ocr = OCR_FACTORY.getOcr(1);
 
         while (true) {
-            LogUtil.infoFirst("打开宠物栏, 宠物位置 {}, 等级限制 lv.{}", pet, limit);
+            LogUtil.infoFirst("打开宠物栏, 宠物位置 {}, 等级限制 lv.{}, 停止方式 {}", pet, limit, desc.get(opt));
             adb.tap(1430, 1000);
             String screenshot = scriptUtils.getImage();
             String path = "";
