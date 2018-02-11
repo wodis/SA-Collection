@@ -32,8 +32,7 @@ public class StoneAgeApp {
             boolean success = script.run();
             if (success) {
                 runTimes++;
-                LogUtil.infoEnd("已运行 {} 次整理\n", runTimes);
-                Utils.sleep(CollectionScript.ROUND_WAIT_TIME);
+                LogUtil.infoEnd("已运行 {} 次\n", runTimes);
             }
         }
     }

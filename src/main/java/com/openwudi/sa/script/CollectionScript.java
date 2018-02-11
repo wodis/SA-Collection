@@ -8,6 +8,7 @@ import com.openwudi.sa.util.Utils;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,11 +17,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class CollectionScript extends Script {
     private static final long RETRY_TIME = 5000L;
     private static final int RETRY_FAIL_TIMES = 5;
     public static final long ROUND_WAIT_TIME = 10 * 60 * 1000L;
+    private long roundTime = ROUND_WAIT_TIME;
 
     private String imagePath;
     private ADB adb;
@@ -34,6 +37,16 @@ public class CollectionScript extends Script {
     }
 
     public boolean run() {
+        Scanner sc = new Scanner(System.in);
+        LogUtil.info("请输入整理间隔(单位：分钟)");
+        int min = Integer.parseInt(sc.nextLine().trim());
+        roundTime = min * 60 * 1000L;
+        while (true){
+            collect();
+        }
+    }
+
+    private void collect(){
         long startTime = System.currentTimeMillis();
         scriptUtils.stopBattle();
         scriptUtils.stopBattle();
@@ -51,9 +64,10 @@ public class CollectionScript extends Script {
                     scriptUtils.startBattle();
                     //删除缓存截图
                     Utils.deleteCache(imagePath);
-                    String date = Utils.stampToDate((System.currentTimeMillis() + ROUND_WAIT_TIME) + "");
+                    String date = Utils.stampToDate((System.currentTimeMillis() + roundTime) + "");
                     LogUtil.info("本次用时: {} 秒", (System.currentTimeMillis() - startTime) / 1000);
                     LogUtil.info("下次启动时间: {}", date);
+                    Utils.sleep(roundTime);
                     break;
                 } else {
                     LogUtil.info("还在战斗,1分钟内重试");
@@ -65,10 +79,8 @@ public class CollectionScript extends Script {
                     }
                 }
             }
-            return true;
         } catch (Exception e) {
             LogUtil.infoEnd(e.getMessage() + "\n");
-            return false;
         }
     }
 
