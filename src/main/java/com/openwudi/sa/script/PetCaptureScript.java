@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class PetCaptureScript extends Script {
-    private static final Long ROUND_TIME = 1 * 20 * 1000L;
+    private static final Long ROUND_TIME = 1 * 10 * 1000L;
 
     private ScriptUtils scriptUtils;
 

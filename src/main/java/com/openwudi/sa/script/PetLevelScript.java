@@ -50,6 +50,7 @@ public class PetLevelScript extends Script {
         OCR ocr = OCR_FACTORY.getOcr(1);
 
         while (true) {
+            long startTime = System.currentTimeMillis();
             LogUtil.infoFirst("打开宠物栏, 宠物位置 {}, 等级限制 lv.{}, 停止方式 {}", pet, limit, desc.get(opt));
             adb.tap(1430, 1000);
             String screenshot = scriptUtils.getImage();
@@ -88,6 +89,7 @@ public class PetLevelScript extends Script {
                         LogUtil.info("宠物位置 {}, 到达lv.{}限制!!!", pet, limit);
                         operation(opt);
                     }
+                    LogUtil.infoEnd("耗时:{}毫秒", (System.currentTimeMillis() - startTime));
                     LogUtil.info("等待 {} 秒后继续检查.", ROUND_TIME / (1000f));
                     Utils.sleep(ROUND_TIME);
                 } catch (NumberFormatException e) {
@@ -130,8 +132,8 @@ public class PetLevelScript extends Script {
     }
 
     private void moveDebugImage(String path) throws IOException {
-        File debugDir = new File(new File(imagePath).getParent(), "debug");
-        FileUtils.moveFileToDirectory(new File(path), debugDir, true);
+//        File debugDir = new File(new File(imagePath).getParent(), "debug");
+//        FileUtils.moveFileToDirectory(new File(path), debugDir, true);
     }
 
     /**
