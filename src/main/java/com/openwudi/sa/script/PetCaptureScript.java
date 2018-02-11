@@ -22,6 +22,7 @@ public class PetCaptureScript extends Script {
     public boolean run() throws Exception {
         Scanner sc = new Scanner(System.in);
         while (true) {
+            long startTime = System.currentTimeMillis();
             String img = scriptUtils.getImage();
             float result = scriptUtils.getImageHashResult(img, 1350, 155, 100, 100, this.getClass().getResourceAsStream("/defense.png"));
             if (result > 0.9) {
@@ -37,6 +38,7 @@ public class PetCaptureScript extends Script {
                     }
                 }
             } else {
+                LogUtil.info("耗时:{}毫秒", (System.currentTimeMillis() - startTime));
                 LogUtil.info("等待 {} 秒后继续检查.", ROUND_TIME / (1000f));
                 Utils.sleep(ROUND_TIME);
             }
