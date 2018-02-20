@@ -54,7 +54,7 @@ public class StoneAgeApp {
     }
 
     private static String getDeviceCachePath(String device) {
-        String cache = new File("/Volumes/PicCache").getAbsolutePath() + File.separator + "PicCache" + File.separator + device;
+        String cache = new File("z:\\").getAbsolutePath() + File.separator + "PicCache" + File.separator + device;
 //        String cache = new File("").getAbsolutePath() + File.separator + "PicCache" + File.separator + device;
         File path = new File(cache);
         if (!path.exists()) {
