@@ -34,6 +34,11 @@ public class BiImage {
     /** 将image中的像素读取出来，存放在本变量中 */
     protected int pixels[];
 
+    /**
+     * 查找灰色像素
+     */
+    protected boolean checkGray = false;
+
     /** The constructor */
     public BiImage() {
 
@@ -83,7 +88,7 @@ public class BiImage {
      * @param pixel 一个 TYPE_INT_ARGB颜色
      * @return 对应的黑色或白色
      */
-    private static int convertToBlackWhite(int pixel) {
+    private int convertToBlackWhite(int pixel) {
         int result = 0;
 
         //int alpha = (pixel >> 24) & 0xff; // not used
@@ -93,11 +98,15 @@ public class BiImage {
 
         result = 0xff000000; // 这样，白色就为全F，即 -1
 
-        int tmp = red * red + green * green + blue * blue;
-        if(tmp > 6*128*128){ // 大于，则是白色
-            result += 0x00ffffff;
-        } else { // 是黑色
-
+        if (checkGray){
+            if (red == green && green == blue && blue < 100){
+                result += 0x00ffffff;
+            }
+        } else {
+            int tmp = red * red + green * green + blue * blue;
+            if(tmp > 6*128*128){ // 大于，则是白色
+                result += 0x00ffffff;
+            }
         }
 
         return result;
@@ -179,6 +188,10 @@ public class BiImage {
         bi = null;
     }
 
+    public void gray(boolean checkGray){
+        this.checkGray = checkGray;
+    }
+
     /**
      * 将图片转化为黑白图片
      *
@@ -257,13 +270,14 @@ public class BiImage {
 
         BiImage bi = new BiImage();
         try {
-            bi.initialize("/Users/diwu/Desktop/39.png");
+            bi.initialize("d:\\20180308234650.png");
+            bi.gray(true);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        String b = "/Users/diwu/Desktop/temp.png";
+        String b = "d:\\temp.png";
         bi.monochrome(b); // 黑白化，输出到磁盘
         // 从磁盘读取刚生成的文件，检测每个像素，是否是黑白两色
         System.out.println(BiImage.isMonochrome(b)); // 总是false，检测失败，靠
